@@ -5,7 +5,7 @@
 
 template <typename T> T* ToUserDataPtr(lua_State* L, int index)
 {
-    void** p = (void**)lua_touserdata(L, index);
+    void** p = reinterpret_cast<void**>(lua_touserdata(L, index));
     if (p == nullptr) return nullptr;
 
     T* t = reinterpret_cast<T*>(*p);
@@ -95,7 +95,7 @@ void createClassMeta(lua_State*L, const char* className, luaL_Reg libs[])
     lua_pop(L, lua_gettop(L)-index);
 }
 
-static int report (lua_State *L, int status)
+static int report(lua_State *L, int status)
 {
     if (status) {
         const char *msg = lua_tostring(L, -1);
@@ -108,8 +108,8 @@ static int report (lua_State *L, int status)
 
 void Lua_Pet(lua_State* L, Pet* pet)
 {
-    void** p = (void**)lua_newuserdata(L, sizeof(void*));
-    *p = (void*)pet;
+    void** p = reinterpret_cast<void**>(lua_newuserdata(L, sizeof(void*)));
+    *p = reinterpret_cast<void*>(pet);
     luaL_getmetatable(L, "Pet");
     lua_setmetatable(L, -2);
 }
