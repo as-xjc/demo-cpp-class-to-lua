@@ -54,10 +54,9 @@ static void set(lua_State *L, int table_index, const char *key)
 }
 
 /* 创建完class的metatable后，lua层加入的东西
- * mt = {}
  * _G[className] = {
  * "new" = 略,
- * __metatable = mt,
+ * __metatable = {},
  * }
  *
  * className(metatable) = {
